@@ -1,0 +1,24 @@
+{
+  "name": "afk-team-pages",
+  "version": "0.0.0",
+  "description": "AFK team pages for use with Jekyll",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/askoyfk/afk-team-pages"
+  },
+  "author": "Victor Nystad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/askoyfk/afk-team-pages/issues"
+  },
+  "homepage": "https://github.com/askoyfk/afk-team-pages",
+  "devDependencies": {
+    "gulp": "~3.8.8",
+    "es6-promise": "~1.0.0",
+    "google-spreadsheet": "~0.2.8"
+  }
+}
