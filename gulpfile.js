@@ -5,35 +5,33 @@ var afk_sheet = new GoogleSpreadsheet('1svnSp174idz6UiibQbdYqOO6wGH1tbPAxANK6TVZ
 var convert = require('gulp-convert');
 var file = require('gulp-file');
 
+var useless = ['_xml', 'id', 'title', 'content', '_links', 'save', 'del'];
 
-gulp.task('default', function () {
+gulp.task('contacts', function () {
     return new Promise(function (resolve, reject) {
         return afk_sheet.getInfo(function (err, info) {
-            var teams = info.worksheets[0];
+
             var contacts = info.worksheets[1];
 
-            if (err) {
-                reject(new Error(err))
+            if (contacts != undefined) {
+                resolve(contacts);
             } else {
-                resolve({
-                    teams: teams,
-                    contacts: contacts
-                })
+                reject(new Error('no contacts'))
             }
         })
     })
     .then(function(data) {
-
         var contacts = [];
-        data.contacts.getRows(1, function(err, rows) {
+        data.getRows(1, function(err, rows) {
             rows.forEach(function(row) {
-                contacts.push({
-                    name: row.navn,
-                    phone: row.telefon,
-                    email: row.epost
-                });
-            });
 
+                useless.forEach(function (prop) {
+                    delete row[prop];
+                });
+
+                contacts.push(row);
+
+            });
             file('contacts.json', JSON.stringify(contacts))
                 .pipe(convert({
                     from: 'json',
@@ -41,11 +39,58 @@ gulp.task('default', function () {
                 }))
                 .pipe(gulp.dest('contacts'))
         });
-
     })
     .then(console.log.bind(console))
     .catch(function(error) {
         console.log(new Error(error))
     })
+});
+
+
+gulp.task('teams', function () {
+    return new Promise(function (resolve, reject) {
+        return afk_sheet.getInfo(function (err, info) {
+
+            var teams = info.worksheets[0];
+
+            if (teams != undefined) {
+                resolve(teams);
+            } else {
+                reject(new Error('no teams'))
+            }
+        })
+    })
+    .then(function(data) {
+        var teams = [];
+
+        data.getRows(1, function(err, rows) {
+
+            rows.forEach(function(row) {
+
+                useless.forEach(function (prop) {
+                    delete row[prop];
+                });
+
+                teams.push(row);
+            });
+
+            file('teams.json', JSON.stringify(teams))
+                .pipe(convert({
+                    from: 'json',
+                    to: 'yml'
+                }))
+                .pipe(gulp.dest('teams'))
+        });
+    })
+    .then(console.log.bind(console))
+    .catch(function(error) {
+        console.log(new Error(error))
+    })
+})
+
+
+
+gulp.task('default', function () {
+
 
 });
