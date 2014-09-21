@@ -21,6 +21,7 @@
     "es6-promise": "~1.0.0",
     "google-spreadsheet": "~0.2.8",
     "gulp-convert": "~0.1.0",
-    "gulp-file": "~0.1.0"
+    "gulp-file": "~0.1.0",
+    "gulp-insert": "~0.4.0"
   }
 }
