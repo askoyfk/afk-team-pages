@@ -5,10 +5,12 @@ var afk_sheet = new GoogleSpreadsheet('1svnSp174idz6UiibQbdYqOO6wGH1tbPAxANK6TVZ
 var convert = require('gulp-convert');
 var file = require('gulp-file');
 var insert = require('gulp-insert');
+var replace = require('gulp-ext-replace');
+var del = require('del');
 
 var useless = ['_xml', 'id', 'title', 'content', '_links', 'save', 'del'];
 
-gulp.task('contacts', function () {
+gulp.task('contacts', ['clean:contacts'], function () {
     return new Promise(function (resolve, reject) {
         return afk_sheet.getInfo(function (err, info) {
 
@@ -48,7 +50,7 @@ gulp.task('contacts', function () {
 });
 
 
-gulp.task('teams', function () {
+gulp.task('teams', ['clean:teams'], function () {
     return new Promise(function (resolve, reject) {
         return afk_sheet.getInfo(function (err, info) {
 
@@ -63,6 +65,8 @@ gulp.task('teams', function () {
     })
     .then(function(data) {
 
+        var teams = [];
+
         data.getRows(1, function(err, rows) {
 
             rows.forEach(function(row, i) {
@@ -71,14 +75,38 @@ gulp.task('teams', function () {
                     delete row[prop];
                 });
 
-                file( 'lag-nr-' + i + '.json', JSON.stringify(row))
+                teams.push(row);
+
+                var filename = row.hovedlag.toLowerCase() + ' ' + row.lagnavniturnering.toLowerCase();
+
+                filename = filename.replace(/[æøå\/]/g, function(m) {
+                    return {
+                        '/' : '-',
+                        'æ' : 'a',
+                        'ø' : 'o',
+                        'å' : 'a'
+                    }[m];
+                }).replace(/\s/g, '-');
+
+
+                file(  filename + '.json', JSON.stringify(row))
                     .pipe(convert({
                         from: 'json',
                         to: 'yml'
                     }))
                     .pipe(insert.wrap('---\n', '---\n'))
+                    .pipe(replace('.md'))
                     .pipe(gulp.dest('teams'))
             });
+
+            file('teams.json', JSON.stringify(teams))
+                .pipe(convert({
+                    from: 'json',
+                    to: 'yml'
+                }))
+                // .pipe(console.log.bind(console))
+                .pipe(gulp.dest('teams'))
+
         });
     })
     .catch(function(error) {
@@ -87,8 +115,12 @@ gulp.task('teams', function () {
 })
 
 
-
-gulp.task('default', function () {
-
-
+gulp.task('clean:teams', function(cb) {
+    del(['./teams/**'], cb);
 });
+
+gulp.task('clean:contacts', function(cb) {
+    del(['./contacts/**'], cb);
+})
+
+gulp.task('default', ['teams', 'contacts']);
