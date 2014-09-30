@@ -3,10 +3,12 @@ var Promise = require('es6-promise').Promise;
 var GoogleSpreadsheet = require("google-spreadsheet");
 var afk_sheet = new GoogleSpreadsheet('1svnSp174idz6UiibQbdYqOO6wGH1tbPAxANK6TVZKHc');
 var convert = require('gulp-convert');
-var file = require('gulp-file');
+var File = require('gulp-file');
 var insert = require('gulp-insert');
 var replace = require('gulp-ext-replace');
 var del = require('del');
+var beautify = require('gulp-beautify');
+var tap = require('gulp-tap');
 
 var useless = ['_xml', 'id', 'title', 'content', '_links', 'save', 'del'];
 
@@ -35,7 +37,7 @@ gulp.task('contacts', ['clean:contacts'], function () {
                 contacts.push(row);
 
             });
-            file('contacts.json', JSON.stringify(contacts))
+            File('contacts.json', JSON.stringify(contacts))
                 .pipe(convert({
                     from: 'json',
                     to: 'yml'
@@ -64,56 +66,76 @@ gulp.task('teams', ['clean:teams'], function () {
         })
     })
     .then(function(data) {
+        return new Promise(function (resolve, reject) {
 
-        var teams = [];
+            var teams = [];
 
-        data.getRows(1, function(err, rows) {
+            data.getRows(1, function(err, rows) {
 
-            rows.forEach(function(row, i) {
+                rows.forEach(function(row, i) {
 
-                useless.forEach(function (prop) {
-                    delete row[prop];
+                    var name = row.lagnavn;
+
+                    var group = teams.filter(function(element) {
+                        return element.name === name;
+                    })[0] || {
+                        name : name,
+                        category : row.kategori,
+                        teams : []
+                    };
+
+                    group.teams.push({
+                        name: row.lagnavniturnering,
+                        kontaktperson: row.kontaktperson,
+                        fiksid: row.fiksid || null
+                    });
+
+                    if (group.teams.length === 1) {
+                        teams.push(group);
+                    };
+
                 });
 
-                teams.push(row);
-
-                var filename = row.hovedlag.toLowerCase() + ' ' + row.lagnavniturnering.toLowerCase();
-
-                filename = filename.replace(/[æøå\/]/g, function(m) {
-                    return {
-                        '/' : '-',
-                        'æ' : 'a',
-                        'ø' : 'o',
-                        'å' : 'a'
-                    }[m];
-                }).replace(/\s/g, '-');
-
-
-                file(  filename + '.json', JSON.stringify(row))
-                    .pipe(convert({
-                        from: 'json',
-                        to: 'yml'
-                    }))
-                    .pipe(insert.wrap('---\n', '---\n'))
-                    .pipe(replace('.md'))
-                    .pipe(gulp.dest('teams/' + row.kategori))
+                if (teams.length > 0) {
+                    resolve(teams)
+                } else {
+                    reject(Error('no teams'))
+                }
             });
 
-            file('teams.json', JSON.stringify(teams))
+        });
+
+    })
+    .then(function (data) {
+
+        data.forEach(function (team) {
+            var filename = team.name.toLowerCase();
+
+            filename = filename.replace(/[æøå\/]/g, function(m) {
+                return {
+                    '/' : '-',
+                    'æ' : 'a',
+                    'ø' : 'o',
+                    'å' : 'a'
+                }[m];
+            }).replace(/\s/g, '-');
+
+
+            File(  filename + '.json', JSON.stringify(team))
                 .pipe(convert({
                     from: 'json',
                     to: 'yml'
                 }))
-                // .pipe(console.log.bind(console))
-                .pipe(gulp.dest('./data'))
+                .pipe(insert.wrap('---\n', '---\n'))
+                .pipe(replace('.md'))
+                .pipe(gulp.dest('teams/' + team.category))
+        })
 
-        });
     })
     .catch(function(error) {
         console.log(new Error(error))
     })
-})
-
+});
 
 gulp.task('clean:teams', function(cb) {
     del(['./teams/**'], cb);
