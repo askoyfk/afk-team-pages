@@ -41,7 +41,7 @@ gulp.task('contacts', ['clean:contacts'], function () {
                     to: 'yml'
                 }))
                 // .pipe(console.log.bind(console))
-                .pipe(gulp.dest('contacts'))
+                .pipe(gulp.dest('./data'))
         });
     })
     .catch(function(error) {
@@ -96,7 +96,7 @@ gulp.task('teams', ['clean:teams'], function () {
                     }))
                     .pipe(insert.wrap('---\n', '---\n'))
                     .pipe(replace('.md'))
-                    .pipe(gulp.dest('teams'))
+                    .pipe(gulp.dest('teams/' + row.kategori))
             });
 
             file('teams.json', JSON.stringify(teams))
@@ -105,7 +105,7 @@ gulp.task('teams', ['clean:teams'], function () {
                     to: 'yml'
                 }))
                 // .pipe(console.log.bind(console))
-                .pipe(gulp.dest('teams'))
+                .pipe(gulp.dest('./data'))
 
         });
     })
