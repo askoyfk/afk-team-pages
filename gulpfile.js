@@ -66,102 +66,76 @@ gulp.task('teams', ['clean:teams'], function () {
         })
     })
     .then(function(data) {
+        return new Promise(function (resolve, reject) {
 
-        var teams = [];
+            var teams = [];
 
-        data.getRows(1, function(err, rows) {
+            data.getRows(1, function(err, rows) {
 
-            rows.forEach(function(row, i) {
+                rows.forEach(function(row, i) {
 
-                useless.forEach(function (prop) {
-                    delete row[prop];
+                    var name = row.lagnavn;
+
+                    var group = teams.filter(function(element) {
+                        return element.name === name;
+                    })[0] || {
+                        name : name,
+                        category : row.kategori,
+                        teams : []
+                    };
+
+                    group.teams.push({
+                        name: row.lagnavniturnering,
+                        kontaktperson: row.kontaktperson,
+                        fiksid: row.fiksid || null
+                    });
+
+                    if (group.teams.length === 1) {
+                        teams.push(group);
+                    };
+
                 });
 
-                teams.push(row);
-
-                // var filename = row.hovedlag.toLowerCase() + ' ' + row.lagnavniturnering.toLowerCase();
-                //
-                // filename = filename.replace(/[æøå\/]/g, function(m) {
-                //     return {
-                //         '/' : '-',
-                //         'æ' : 'a',
-                //         'ø' : 'o',
-                //         'å' : 'a'
-                //     }[m];
-                // }).replace(/\s/g, '-');
-                //
-                //
-                // file(  filename + '.json', JSON.stringify(row))
-                //     .pipe(convert({
-                //         from: 'json',
-                //         to: 'yml'
-                //     }))
-                //     .pipe(insert.wrap('---\n', '---\n'))
-                //     .pipe(replace('.md'))
-                //     .pipe(gulp.dest('teams/' + row.kategori))
+                if (teams.length > 0) {
+                    resolve(teams)
+                } else {
+                    reject(Error('no teams'))
+                }
             });
 
-            File('teams.json', JSON.stringify(teams))
-                .pipe(beautify({
-                    indent: 2
-                }))
-                .pipe(gulp.dest('./data'));
+        });
 
-            File('teams.json', JSON.stringify(teams))
+    })
+    .then(function (data) {
+
+        data.forEach(function (team) {
+            var filename = team.name.toLowerCase();
+
+            filename = filename.replace(/[æøå\/]/g, function(m) {
+                return {
+                    '/' : '-',
+                    'æ' : 'a',
+                    'ø' : 'o',
+                    'å' : 'a'
+                }[m];
+            }).replace(/\s/g, '-');
+
+
+            File(  filename + '.json', JSON.stringify(team))
                 .pipe(convert({
                     from: 'json',
                     to: 'yml'
                 }))
-                // .pipe(console.log.bind(console))
-                .pipe(gulp.dest('./data'))
+                .pipe(insert.wrap('---\n', '---\n'))
+                .pipe(replace('.md'))
+                .pipe(gulp.dest('teams/' + team.category))
+        })
 
-        });
     })
     .catch(function(error) {
         console.log(new Error(error))
     })
 });
-
-gulp.task('merge:teams', function (cb) {
-    gulp.src('./data/teams.json')
-        .pipe(tap(function (file, t) {
-
-            var data = JSON.parse(file.contents.toString());
-
-            var teams = [];
-
-            data.forEach(function (team) {
-
-                var name = team.lagnavn;
-
-                var group = teams.filter(function(element) {
-                    return element.name === name;
-                })[0] || {
-                    name : name,
-                    category : team.kategori,
-                    teams : []
-                };
-
-                group.teams.push({
-                    name: team.lagnavniturnering,
-                    kontaktperson: team.kontaktperson,
-                    fiksid: team.fiksid || null
-                });
-
-                if (group.teams.length === 1) {
-                    teams.push(group);
-                };
-
-            });
-
-            file.contents = new Buffer(JSON.stringify(teams));
-
-
-        }))
-        .pipe(beautify({ indent: 2 }))
-        .pipe(gulp.dest('./groups/'));
-});
-
 
 gulp.task('clean:teams', function(cb) {
     del(['./teams/**'], cb);
