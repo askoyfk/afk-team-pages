@@ -12,6 +12,13 @@ var tap = require('gulp-tap');
 
 var useless = ['_xml', 'id', 'title', 'content', '_links', 'save', 'del'];
 
+var sex = {
+    g: 'gutter',
+    j: 'jenter',
+    m: 'menn',
+    s: 'blandet'
+};
+
 gulp.task('contacts', ['clean:contacts'], function () {
     return new Promise(function (resolve, reject) {
         return afk_sheet.getInfo(function (err, info) {
@@ -77,9 +84,12 @@ gulp.task('teams', ['clean:teams'], function () {
                     var name = row.lagnavn;
 
                     var group = teams.filter(function(element) {
-                        return element.name === name;
+                        return element.title === name;
                     })[0] || {
-                        name : name,
+                        title : name,
+                        layout: 'team',
+                        sex: sex[row.hovedlag.charAt(6).toLowerCase()],
+                        age: 7,
                         category : row.kategori,
                         teams : []
                     };
@@ -109,7 +119,7 @@ gulp.task('teams', ['clean:teams'], function () {
     .then(function (data) {
 
         data.forEach(function (team) {
-            var filename = team.name.toLowerCase();
+            var filename = team.title.toLowerCase();
 
             filename = filename.replace(/[æøå\/]/g, function(m) {
                 return {
