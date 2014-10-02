@@ -138,6 +138,7 @@ gulp.task('teams', ['clean:teams'], function () {
                 }[m];
             }).replace(/\s/g, '-');
 
+            team.slug = filename;
 
             File(  filename + '.json', JSON.stringify(team))
                 .pipe(convert({
