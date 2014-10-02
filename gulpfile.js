@@ -79,9 +79,17 @@ gulp.task('teams', ['clean:teams'], function () {
 
             data.getRows(1, function(err, rows) {
 
+
+
                 rows.forEach(function(row, i) {
 
+
+
                     var name = row.lagnavn;
+
+                    var age = /([0-9]+[^\s|-])/g.exec(row.hovedlag);
+
+                    console.log(age);
 
                     var group = teams.filter(function(element) {
                         return element.title === name;
@@ -89,7 +97,7 @@ gulp.task('teams', ['clean:teams'], function () {
                         title : name,
                         layout: 'team',
                         sex: sex[row.hovedlag.charAt(6).toLowerCase()],
-                        age: 7,
+                        age: age === null ? null : Number(age[1]),
                         category : row.kategori,
                         teams : []
                     };

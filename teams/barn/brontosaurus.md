@@ -1,5 +1,8 @@
 ---
-name: Brontosaurus
+title: Brontosaurus
+layout: team
+sex: gutter
+age: 9
 category: barn
 teams:
   -

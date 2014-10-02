@@ -1,5 +1,8 @@
 ---
-name: Fiolett
+title: Fiolett
+layout: team
+sex: jenter
+age: 11
 category: barn
 teams:
   -

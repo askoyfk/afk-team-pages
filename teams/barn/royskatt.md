@@ -1,5 +1,8 @@
 ---
-name: Røyskatt
+title: Røyskatt
+layout: team
+sex: jenter
+age: 7
 category: barn
 teams:
   -

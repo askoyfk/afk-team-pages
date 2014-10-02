@@ -1,5 +1,8 @@
 ---
-name: A
+title: A
+layout: team
+sex: menn
+age: null
 category: senior
 teams:
   -

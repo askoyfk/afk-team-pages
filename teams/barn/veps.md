@@ -1,5 +1,8 @@
 ---
-name: Veps
+title: Veps
+layout: team
+sex: gutter
+age: 10
 category: barn
 teams:
   -

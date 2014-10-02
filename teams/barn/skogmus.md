@@ -1,5 +1,8 @@
 ---
-name: Skogmus
+title: Skogmus
+layout: team
+sex: jenter
+age: 9
 category: barn
 teams:
   -

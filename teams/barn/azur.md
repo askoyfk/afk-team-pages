@@ -1,5 +1,8 @@
 ---
-name: Azur
+title: Azur
+layout: team
+sex: gutter
+age: 12
 category: barn
 teams:
   -

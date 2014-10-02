@@ -1,5 +1,8 @@
 ---
-name: Pegasus
+title: Pegasus
+layout: team
+sex: jenter
+age: 8
 category: barn
 teams:
   -

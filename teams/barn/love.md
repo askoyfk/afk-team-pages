@@ -1,5 +1,8 @@
 ---
-name: Løve
+title: Løve
+layout: team
+sex: gutter
+age: 10
 category: barn
 teams:
   -

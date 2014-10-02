@@ -1,5 +1,8 @@
 ---
-name: Mår
+title: Mår
+layout: team
+sex: gutter
+age: 9
 category: barn
 teams:
   -

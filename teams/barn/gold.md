@@ -1,5 +1,8 @@
 ---
-name: Gold
+title: Gold
+layout: team
+sex: gutter
+age: 12
 category: barn
 teams:
   -

@@ -1,5 +1,8 @@
 ---
-name: Villkatt
+title: Villkatt
+layout: team
+sex: gutter
+age: 7
 category: barn
 teams:
   -

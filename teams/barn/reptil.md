@@ -1,5 +1,8 @@
 ---
-name: Reptil
+title: Reptil
+layout: team
+sex: gutter
+age: 9
 category: barn
 teams:
   -

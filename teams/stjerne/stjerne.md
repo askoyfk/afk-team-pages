@@ -1,5 +1,8 @@
 ---
-name: Stjerne
+title: Stjerne
+layout: team
+sex: blandet
+age: null
 category: stjerne
 teams:
   -

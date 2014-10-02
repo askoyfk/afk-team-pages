@@ -1,5 +1,8 @@
 ---
-name: Gepard
+title: Gepard
+layout: team
+sex: gutter
+age: 7
 category: barn
 teams:
   -

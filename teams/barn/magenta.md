@@ -1,5 +1,8 @@
 ---
-name: Magenta
+title: Magenta
+layout: team
+sex: gutter
+age: 11
 category: barn
 teams:
   -

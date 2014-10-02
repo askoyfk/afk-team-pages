@@ -1,5 +1,8 @@
 ---
-name: Panter
+title: Panter
+layout: team
+sex: gutter
+age: 10
 category: barn
 teams:
   -

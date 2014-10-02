@@ -1,5 +1,8 @@
 ---
-name: Tiger
+title: Tiger
+layout: team
+sex: gutter
+age: 7
 category: barn
 teams:
   -

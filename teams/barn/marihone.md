@@ -1,5 +1,8 @@
 ---
-name: Marihøne
+title: Marihøne
+layout: team
+sex: jenter
+age: 9
 category: barn
 teams:
   -

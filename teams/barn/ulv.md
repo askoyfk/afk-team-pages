@@ -1,5 +1,8 @@
 ---
-name: Ulv
+title: Ulv
+layout: team
+sex: gutter
+age: 10
 category: barn
 teams:
   -

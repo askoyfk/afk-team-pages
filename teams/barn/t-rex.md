@@ -1,5 +1,8 @@
 ---
-name: T-Rex
+title: T-Rex
+layout: team
+sex: gutter
+age: 9
 category: barn
 teams:
   -

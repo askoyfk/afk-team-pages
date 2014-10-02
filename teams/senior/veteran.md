@@ -1,5 +1,8 @@
 ---
-name: Veteran
+title: Veteran
+layout: team
+sex: menn
+age: 50
 category: senior
 teams:
   -

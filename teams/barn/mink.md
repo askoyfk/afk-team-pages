@@ -1,5 +1,8 @@
 ---
-name: Mink
+title: Mink
+layout: team
+sex: gutter
+age: 9
 category: barn
 teams:
   -

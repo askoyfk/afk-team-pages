@@ -1,5 +1,8 @@
 ---
-name: Pink
+title: Pink
+layout: team
+sex: jenter
+age: 12
 category: barn
 teams:
   -

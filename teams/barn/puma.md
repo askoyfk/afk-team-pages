@@ -1,5 +1,8 @@
 ---
-name: Puma
+title: Puma
+layout: team
+sex: gutter
+age: 8
 category: barn
 teams:
   -

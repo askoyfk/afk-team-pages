@@ -1,5 +1,8 @@
 ---
-name: Purple
+title: Purple
+layout: team
+sex: jenter
+age: 12
 category: barn
 teams:
   -

@@ -1,5 +1,8 @@
 ---
-name: Gaupe
+title: Gaupe
+layout: team
+sex: gutter
+age: 8
 category: barn
 teams:
   -
