@@ -79,17 +79,15 @@ gulp.task('teams', ['clean:teams'], function () {
 
             data.getRows(1, function(err, rows) {
 
-
-
                 rows.forEach(function(row, i) {
 
-
+                    //var name = /(?:\S+ )(\S+ )(?:\S+)/.g(row.lagnavniturnering)[1];
 
                     var name = row.lagnavn;
 
                     var age = /([0-9]+[^\s|-])/g.exec(row.hovedlag);
 
-                    console.log(age);
+                    // console.log(age);
 
                     var group = teams.filter(function(element) {
                         return element.title === name;
@@ -98,7 +96,6 @@ gulp.task('teams', ['clean:teams'], function () {
                         layout: 'team',
                         sex: sex[row.hovedlag.charAt(6).toLowerCase()],
                         age: age === null ? null : Number(age[1]),
-                        category : row.kategori,
                         teams : []
                     };
 
@@ -124,7 +121,42 @@ gulp.task('teams', ['clean:teams'], function () {
         });
 
     })
-    .then(function (data) {
+    .then(function category (data) {
+        data.forEach(function (team) {
+
+            if (team.age === null || team.age === 50) {
+                team.category = 'senior';
+            } else if (team.age < 13) {
+                team.category = 'barn';
+            } else if (team.age <= 19) {
+                team.category = 'ungdom';
+            };
+
+            if (team.title.toLowerCase() === 'stjerne') {
+                team.category = 'stjerne'
+            };
+
+        });
+        return data;
+    })
+    .then(function subteams (data) {
+        data.forEach(function (team) {
+            if (team.teams.length > 1) {
+                //console.log(team.title, 'has', team.teams.length, 'subteams');
+                team.teams.forEach(function (subteam) {
+                    team.subteams = team.subteams || [];
+                    if (team.category === 'barn') {
+                        team.subteams.push(/(?:\S+\s){2}(\S+)/g.exec(subteam.name)[1]);
+                    } else {
+                        team.subteams.push(subteam.name);
+                    }
+                    //console.log(subteam.name);
+                });
+            }
+        });
+        return data;
+    })
+    .then(function saveToFile (data) {
 
         data.forEach(function (team) {
             var filename = team.title.toLowerCase();
