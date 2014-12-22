@@ -1,5 +1,5 @@
 {
-  "name": "afk-team-pages",
+  "name": "afk-teams",
   "version": "1.0.0",
   "description": "AFK team pages for use with Jekyll",
   "main": "gulpfile.js",
