@@ -1,6 +1,6 @@
 {
   "name": "afk-teams",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AFK team pages for use with Jekyll",
   "main": "gulpfile.js",
   "repository": {
