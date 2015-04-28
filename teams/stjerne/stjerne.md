@@ -1,11 +1,11 @@
 ---
 title: Stjerne
 layout: team
-sex: blandet
+gender: blandet
 age: null
 teams:
   -
-    name: 'Askøy Stjerne'
+    name: 'Askøy FK Askøy Stjerne'
     kontaktperson: 'Monica Solberg'
     fiksid: null
 category: stjerne

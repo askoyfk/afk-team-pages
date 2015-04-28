@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var Promise = require('es6-promise').Promise;
 var GoogleSpreadsheet = require("google-spreadsheet");
 var afk_sheet = new GoogleSpreadsheet('1svnSp174idz6UiibQbdYqOO6wGH1tbPAxANK6TVZKHc');
 var convert = require('gulp-convert');
@@ -12,7 +11,7 @@ var tap = require('gulp-tap');
 
 var useless = ['_xml', 'id', 'title', 'content', '_links', 'save', 'del'];
 
-var sex = {
+var gender = {
     g: 'gutter',
     j: 'jenter',
     m: 'menn',
@@ -25,12 +24,12 @@ gulp.task('contacts', ['clean:contacts'], function () {
 
             var contacts = info.worksheets[1];
 
-            if (contacts != undefined) {
+            if (contacts !== undefined) {
                 resolve(contacts);
             } else {
-                reject(new Error('no contacts'))
+                reject(new Error('no contacts'));
             }
-        })
+        });
     })
     .then(function(data) {
         var contacts = [];
@@ -50,12 +49,12 @@ gulp.task('contacts', ['clean:contacts'], function () {
                     to: 'yml'
                 }))
                 // .pipe(console.log.bind(console))
-                .pipe(gulp.dest('./data'))
+                .pipe(gulp.dest('./data'));
         });
     })
     .catch(function(error) {
-        console.log(new Error(error))
-    })
+        console.log(new Error(error));
+    });
 });
 
 
@@ -65,12 +64,12 @@ gulp.task('teams', ['clean:teams'], function () {
 
             var teams = info.worksheets[0];
 
-            if (teams != undefined) {
+            if (teams !== undefined) {
                 resolve(teams);
             } else {
-                reject(new Error('no teams'))
+                reject(new Error('no teams'));
             }
-        })
+        });
     })
     .then(function(data) {
         return new Promise(function (resolve, reject) {
@@ -94,7 +93,7 @@ gulp.task('teams', ['clean:teams'], function () {
                     })[0] || {
                         title : name,
                         layout: 'team',
-                        sex: sex[row.hovedlag.charAt(6).toLowerCase()],
+                        gender: gender[row.hovedlag.charAt(6).toLowerCase()],
                         age: age === null ? null : Number(age[1]),
                         teams : []
                     };
@@ -107,14 +106,14 @@ gulp.task('teams', ['clean:teams'], function () {
 
                     if (group.teams.length === 1) {
                         teams.push(group);
-                    };
+                    }
 
                 });
 
                 if (teams.length > 0) {
-                    resolve(teams)
+                    resolve(teams);
                 } else {
-                    reject(Error('no teams'))
+                    reject(Error('no teams'));
                 }
             });
 
@@ -130,11 +129,11 @@ gulp.task('teams', ['clean:teams'], function () {
                 team.category = 'barn';
             } else if (team.age <= 19) {
                 team.category = 'ungdom';
-            };
+            }
 
             if (team.title.toLowerCase() === 'stjerne') {
-                team.category = 'stjerne'
-            };
+                team.category = 'stjerne';
+            }
 
         });
         return data;
@@ -179,13 +178,13 @@ gulp.task('teams', ['clean:teams'], function () {
                 }))
                 .pipe(insert.wrap('---\n', '---\n'))
                 .pipe(replace('.md'))
-                .pipe(gulp.dest('teams/' + team.category))
-        })
+                .pipe(gulp.dest('teams/' + team.category));
+        });
 
     })
     .catch(function(error) {
-        console.log(new Error(error))
-    })
+        console.log(new Error(error));
+    });
 });
 
 gulp.task('clean:teams', function(cb) {
@@ -194,6 +193,6 @@ gulp.task('clean:teams', function(cb) {
 
 gulp.task('clean:contacts', function(cb) {
     del(['./contacts/**'], cb);
-})
+});
 
 gulp.task('default', ['teams', 'contacts']);
